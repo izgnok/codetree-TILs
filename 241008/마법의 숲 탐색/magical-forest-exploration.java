@@ -68,7 +68,7 @@ public class Main {
 
 			// 갈 곳이 없는 경우
 			else {
-				if (row > 2) {
+				if (row > 3) {
 					bfs(row, col, num);
 					return true;
 				}
