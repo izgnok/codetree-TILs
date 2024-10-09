@@ -37,7 +37,7 @@ public class Main {
 					if (node.own_depth == 1 || node.total_depth == 1)
 						continue;
 
-					int total_depth = Math.max(node.own_depth, node.total_depth) - 1;
+					int total_depth = Math.min(node.own_depth, node.total_depth) - 1;
 					nodeList[id] = new Node(parent_id, color, own_depth, total_depth, i);
 					nodeList[parent_id].child.add(id);
 				}
@@ -59,15 +59,10 @@ public class Main {
 				int sum = 0;
 				for(int j=1; j<= 100000; j++) {
 					Node node = nodeList[j];
-					if(node == null) continue;
 					checkColor = new boolean[6];
-					getSum(node, node.color, node.last_update);
-					
-					int cnt = 0;
-					for(int t=1; t<=5; t++) {
-						if(checkColor[t]) cnt++;
-					}
-					sum += cnt * cnt;
+					if(node == null) continue;
+					if(node.parent_id != -1) continue;
+					sum += getSum(node, node.color, node.last_update);
 				}
 				sb.append(sum).append("\n");
 			}
@@ -78,18 +73,24 @@ public class Main {
 		bw.close();
 	}
 	
-	public static void getSum(Node node, int color, int last_update) {
+	public static int getSum(Node node, int color, int last_update) {
 		
 		if(last_update < node.last_update) {
 			last_update = node.last_update;
 			color = node.color;
 		}
-		checkColor[color] = true;	
 		List<Integer> childs = node.child;
+		int sum = 0;
 		for(int i=0; i<childs.size(); i++) {
 			Node child = nodeList[childs.get(i)];
-			getSum(child, color, last_update);
+			sum += getSum(child, color, last_update);
 		}
+		checkColor[color] = true;
+		int cnt = 0;
+		for(int i=1; i<=5; i++) {
+			if(checkColor[i]) cnt++;
+		}
+		return sum + (cnt*cnt);
 	}
 	
 	public static int[] getColor(Node node)  {
