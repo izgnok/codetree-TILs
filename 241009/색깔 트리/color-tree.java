@@ -4,7 +4,6 @@ import java.util.*;
 public class Main {
 	static int N;
 	static Node[] nodeList;
-	static boolean[] checkColor;
 
 	public static void main(String[] args) throws IOException {
 		// 여기에 코드를 작성해주세요.
@@ -59,10 +58,9 @@ public class Main {
 				int sum = 0;
 				for(int j=1; j<= 100000; j++) {
 					Node node = nodeList[j];
-					checkColor = new boolean[6];
 					if(node == null) continue;
 					if(node.parent_id != -1) continue;
-					sum += getSum(node, node.color, node.last_update);
+					sum += (Integer) getSum(node, node.color, node.last_update)[0];
 				}
 				sb.append(sum).append("\n");
 			}
@@ -73,7 +71,7 @@ public class Main {
 		bw.close();
 	}
 	
-	public static int getSum(Node node, int color, int last_update) {
+	public static Object[] getSum(Node node, int color, int last_update) {
 		
 		if(last_update < node.last_update) {
 			last_update = node.last_update;
@@ -81,16 +79,23 @@ public class Main {
 		}
 		List<Integer> childs = node.child;
 		int sum = 0;
+		boolean[] colorCheck = new boolean[6];
+		colorCheck[color] = true;
 		for(int i=0; i<childs.size(); i++) {
 			Node child = nodeList[childs.get(i)];
-			sum += getSum(child, color, last_update);
+			Object[] obj = getSum(child, color, last_update);
+			sum += (Integer) obj[0];
+			boolean[] tmp = (boolean[]) obj[1];
+			for(int j=1; j<=5; j++) {
+				if(tmp[j]) colorCheck[j] = true;
+			}
 		}
-		checkColor[color] = true;
 		int cnt = 0;
 		for(int i=1; i<=5; i++) {
-			if(checkColor[i]) cnt++;
+			if(colorCheck[i]) cnt++;
 		}
-		return sum + (cnt*cnt);
+		sum += cnt * cnt;
+		return new Object[] {sum, colorCheck };
 	}
 	
 	public static int[] getColor(Node node)  {
