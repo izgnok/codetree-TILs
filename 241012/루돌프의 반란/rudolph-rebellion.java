@@ -48,10 +48,12 @@ public class Main {
 
 		out_count = 0;
 		while (M-- > 0) {
+			rudolpMove();
 			if (out_count == P)
 				break;
-			rudolpMove();
 			santaSimulation();
+			if (out_count == P)
+				break;
 			addScoreAndMoveInit();
 		}
 
@@ -144,6 +146,7 @@ public class Main {
 				santa.check--;
 				continue;
 			}
+			santa.move = true;
 			
 			int x = rudolp.x - santa.x;
 			int y = rudolp.y - santa.y;
@@ -168,7 +171,6 @@ public class Main {
 			// 이동하기 
 			if(direct == -1) continue;	
 			santaMove(santa, direct);
-			santa.move = true;
 		}
 	}
 
