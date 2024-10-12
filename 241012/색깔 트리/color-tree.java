@@ -70,7 +70,7 @@ public class Main {
 	public static int[] getColor(Node node) {
 		
 		if(node.parent == -1) {
-			return new int[] { node.color, node.parent };
+			return new int[] { node.color, node.last_update };
 		}
 		
 		int[] arr = getColor(tree[node.parent]);
@@ -78,7 +78,7 @@ public class Main {
 			return arr;
 		}
 		else {
-			return new int[] { node.color, node.parent };
+			return new int[] { node.color, node.last_update };
 		}
 	}
 	
