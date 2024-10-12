@@ -65,23 +65,21 @@ public class Main {
 				check[id] = false;
 			} else if (input == 400) {
 				// 최적여행상품
-				if (travle.isEmpty()) {
-					sb.append("-1").append("\n");
-				} else {
-					while (!travle.isEmpty()) {
-						Travle t = travle.peek();
-						if (t.benefit < 0) {
-							sb.append("-1").append("\n");
-							break;
-						}
-						travle.poll();
-						if (check[t.id]) {
-							check[t.id] = false;
-							sb.append(t.id).append("\n");
-							break;
-						}
+				boolean resultCheck = false;
+				while (!travle.isEmpty()) {
+					Travle t = travle.peek();
+					if (t.benefit < 0) {
+						break;
+					}
+					travle.poll();
+					if (check[t.id]) {
+						check[t.id] = false;
+						sb.append(t.id).append("\n");
+						resultCheck = true;
+						break;
 					}
 				}
+				if(!resultCheck) sb.append("-1").append("\n");
 			} else {
 				// 출발지 변경
 				start = Integer.parseInt(st.nextToken());
