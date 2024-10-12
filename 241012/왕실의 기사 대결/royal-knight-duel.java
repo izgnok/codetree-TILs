@@ -99,7 +99,7 @@ public class Main {
 				}
 			}
 		}
-		moveList.add(num);
+		if(!moveSet.contains(num)) moveList.add(num);
 		moveSet.add(num);
 		return true;
 	}
@@ -116,11 +116,9 @@ public class Main {
 		
 		for(int i=1; i<=L; i++) {
 			for(int j=1; j<=L; j++) {
-				if(map[i][j] == 0) continue;
-				if(map[i][j] == 2) continue;
-				if(gisaMap[i][j] == 0) continue;
-				if(gisaMap[i][j] == num) continue;
-				
+				if(map[i][j] != 1) continue;
+				if(gisaMap[i][j] == 0 || gisaMap[i][j] == num) continue;
+
 				int damageNum = gisaMap[i][j];
 				if(!moveSet.contains(damageNum)) continue;
 				gisaList[damageNum].k--;
