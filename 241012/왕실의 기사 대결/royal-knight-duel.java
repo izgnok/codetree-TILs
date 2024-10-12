@@ -6,9 +6,7 @@ public class Main {
 
 	static int[][] map;
 	static int[][] gisaMap;
-	
 	static Node[] gisaList;
-	
 	static int[][] dir = { { -1, 0 }, { 0, 1 }, { 1, 0 }, { 0, -1 } };
 	
 	static List<Integer> moveList;
@@ -22,8 +20,8 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 
 		L = Integer.parseInt(st.nextToken());
-		int Q = Integer.parseInt(st.nextToken());
 		N = Integer.parseInt(st.nextToken());
+		int Q = Integer.parseInt(st.nextToken());
 
 		map = new int[L + 1][L + 1];
 		for (int i = 1; i <= L; i++) {
