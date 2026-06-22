@@ -30,7 +30,8 @@ public class Main {
         }
 
         checked = new boolean[N];
-        dfs(0, 0);
+        checked[0] = true;
+        dfs(1, 1);
         sb.append(min);
         bw.write(sb.toString());
         bw.flush();
@@ -45,7 +46,7 @@ public class Main {
         }
         if (cur == N) return;
         if (count + (N - cur) < N / 2) return;
-        
+
         checked[cur] = true;
         dfs(cur + 1, count + 1);
         checked[cur] = false;
