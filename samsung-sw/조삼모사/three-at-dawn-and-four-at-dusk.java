@@ -37,18 +37,19 @@ public class Main {
         bw.close();
     }
 
-    static void dfs(int start, int count) {
+    static void dfs(int cur, int count) {
         if (count == N / 2) {
             int tmp = calc();
             if (min > tmp) min = tmp;
             return;
         }
-
-        for (int i = start; i < N; i++) {
-            checked[i] = true;
-            dfs(i + 1, count + 1);
-            checked[i] = false;
-        }
+        if (cur == N) return;
+        if (count + (N - cur) < N / 2) return;
+        
+        checked[cur] = true;
+        dfs(cur + 1, count + 1);
+        checked[cur] = false;
+        dfs(cur + 1, count);
     }
 
     static int calc() {
