@@ -10,7 +10,7 @@ public class Main {
     static List<Node> humans;
     static int[][] dist;
     static int result;
-    static HashSet<Integer> pickHospital;
+    static int[] pickHospital;
 
     public static void main(String[] args) throws IOException {
 
@@ -43,7 +43,7 @@ public class Main {
             searchDist();
 
             result = INF;
-            pickHospital = new HashSet<>();
+            pickHospital = new int[M];
             dfs(0, 0);
         }
         sb.append(result);
@@ -70,9 +70,8 @@ public class Main {
         if (hospitals.size() - idx < M - depth) return;
 
         for (int i = idx; i < hospitals.size(); i++) {
-            pickHospital.add(i);
+            pickHospital[depth] = i;
             dfs(i + 1, depth + 1);
-            pickHospital.remove(i);
         }
     }
 
@@ -83,6 +82,7 @@ public class Main {
             for (int j : pickHospital) {
                 min = Math.min(min, dist[i][j]);
             }
+
             sum += min;
         }
         result = Math.min(result, sum);
