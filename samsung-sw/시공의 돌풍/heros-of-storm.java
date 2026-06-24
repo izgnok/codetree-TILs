@@ -1,5 +1,3 @@
-import org.w3c.dom.Node;
-
 import java.util.*;
 import java.io.*;
 
@@ -54,18 +52,19 @@ public class Main {
     }
 
     static void spread() {
-        int[][] add = new int[N][M];
-        int[][] minus = new int[N][M];
+        int[][] delta = new int[N][M];
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
+                if (map[i][j] <= 0) continue;
+                int share = map[i][j] / 5;
                 for (int[] dir : dirs) {
                     int row = i + dir[0];
                     int col = j + dir[1];
                     if (row < 0 || row >= N || col < 0 || col >= M) continue;
                     if (map[row][col] == -1) continue;
-                    add[row][col] += (map[i][j] / 5);
-                    minus[i][j] += (map[i][j] / 5);
+                    delta[row][col] += share;
+                    delta[i][j] -= share;
                 }
             }
         }
@@ -73,7 +72,7 @@ public class Main {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 if (map[i][j] == -1) continue;
-                map[i][j] += add[i][j] - minus[i][j];
+                map[i][j] += delta[i][j];
             }
         }
     }
