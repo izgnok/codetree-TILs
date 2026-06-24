@@ -22,8 +22,8 @@ public class Main {
 
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
-        humans = new ArrayList<>();
-        hospitals = new ArrayList<>();
+        humans = new ArrayList<>(100);
+        hospitals = new ArrayList<>(13);
 
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine());
