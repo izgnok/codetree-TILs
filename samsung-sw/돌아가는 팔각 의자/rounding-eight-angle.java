@@ -3,8 +3,8 @@ import java.io.*;
 
 public class Main {
 
-    static Deque<Integer>[] rightCharis;
-    static Deque<Integer>[] leftCharis;
+    static int[][] gear;
+    static int[] head;
     static Queue<Node> rotateCharis;
 
     public static void main(String[] args) throws IOException {
@@ -13,17 +13,13 @@ public class Main {
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         StringBuilder sb = new StringBuilder();
 
-        rightCharis = new Deque[4];
-        leftCharis = new Deque[4];
+        gear = new int[4][8];
+        head = new int[4];
         for (int i = 0; i < 4; i++) {
             String str = br.readLine().trim();
-            rightCharis[i] = new ArrayDeque<>();
-            leftCharis[i] = new ArrayDeque<>();
-            for (int j = 0; j < 2; j++) rightCharis[i].offerLast(str.charAt(j) - '0');
-            for (int j = 7; j >= 2; j--) rightCharis[i].offerFirst(str.charAt(j) - '0');
-            for (int j = 0; j < 6; j++) leftCharis[i].offerLast(str.charAt(j) - '0');
-            for (int j = 7; j >= 6; j--) leftCharis[i].offerFirst(str.charAt(j) - '0');
+            for (int j = 0; j < 8; j++) gear[i][j] = str.charAt(j) - '0';
         }
+
         StringTokenizer st = new StringTokenizer(br.readLine());
         int T = Integer.parseInt(st.nextToken());
 
@@ -34,32 +30,32 @@ public class Main {
             int dir = Integer.parseInt(st.nextToken());
             rotateCharis.add(new Node(idx, dir));
 
-            int preNum = leftCharis[idx].peekFirst();
+            // 왼쪽 전파
+            int preNum = left(idx);
             int preDir = dir;
             for (int i = idx - 1; i >= 0; i--) {
-                if (preNum == rightCharis[i].peekFirst()) break;
-                preNum = leftCharis[i].peekFirst();
+                if (preNum == right(i)) break;
+                preNum = left(i);
                 preDir *= -1;
                 rotateCharis.add(new Node(i, preDir));
             }
-            preNum = rightCharis[idx].peekFirst();
+
+            // 오른쪽 전파
+            preNum = right(idx);
             preDir = dir;
             for (int i = idx + 1; i < 4; i++) {
-                if (preNum == leftCharis[i].peekFirst()) break;
-                preNum = rightCharis[i].peekFirst();
+                if (preNum == left(i)) break;
+                preNum = right(i);
                 preDir *= -1;
                 rotateCharis.add(new Node(i, preDir));
             }
+
             rotate();
         }
 
         int sum = 0;
         for (int i = 0; i < 4; i++) {
-            int num = 0;
-            for (int j = 0; j < 3; j++) {
-                num = leftCharis[i].pollFirst();
-            }
-            if (num == 0) continue;
+            if (gear[i][head[i]] == 0) continue;   // 12시 N극이면 점수 X
             sum += (int) Math.pow(2, i);
         }
         sb.append(sum);
@@ -68,15 +64,17 @@ public class Main {
         bw.close();
     }
 
+    // 접촉 톱니: head 기준 고정 오프셋
+    static int left(int i)  { return gear[i][(head[i] + 6) % 8]; }   // 9시
+    static int right(int i) { return gear[i][(head[i] + 2) % 8]; }   // 3시
+
     static void rotate() {
         while (!rotateCharis.isEmpty()) {
             Node node = rotateCharis.poll();
             if (node.dir == 1) {
-                rightCharis[node.idx].offerFirst(rightCharis[node.idx].pollLast());
-                leftCharis[node.idx].offerFirst(leftCharis[node.idx].pollLast());
+                head[node.idx] = (head[node.idx] + 7) % 8;   // 시계
             } else {
-                rightCharis[node.idx].offerLast(rightCharis[node.idx].pollFirst());
-                leftCharis[node.idx].offerLast(leftCharis[node.idx].pollFirst());
+                head[node.idx] = (head[node.idx] + 1) % 8;   // 반시계
             }
         }
     }
